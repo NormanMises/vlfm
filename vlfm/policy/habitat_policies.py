@@ -59,7 +59,8 @@ class TorchActionIDs:
 
 
 class HabitatMixin:
-    """This Python mixin only contains code relevant for running a BaseObjectNavPolicy
+    """
+    This Python mixin only contains code relevant for running a BaseObjectNavPolicy
     explicitly within Habitat (vs. the real world, etc.) and will endow any parent class
     (that is a subclass of BaseObjectNavPolicy) with the necessary methods to run in
     Habitat.

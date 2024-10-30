@@ -1,13 +1,11 @@
 # Copyright (c) 2023 Boston Dynamics AI Institute LLC. All rights reserved.
 
-import os
+import os  # 导入操作系统模块
 
-# The following imports require habitat to be installed, and despite not being used by
-# this script itself, will register several classes and make them discoverable by Hydra.
-# This run.py script is expected to only be used when habitat is installed, thus they
-# are hidden here instead of in an __init__.py file. This avoids import errors when used
-# in an environment without habitat, such as when doing real-world deployment. noqa is
-# used to suppress the unused import and unsorted import warnings by ruff.
+# 下面的导入需要habitat安装，并且尽管它们本身不被这个脚本使用，但它们
+# 会注册多个类，使它们可以被Hydra发现。这个run.py脚本预计只会在habitat安装时使用，
+# 因此它们被隐藏在这里，而不是在一个__init__.py文件中。这避免了在没有habitat的环境中
+# 导入错误，例如在进行实际部署时。noqa用于抑制未使用的导入和未排序的导入警告
 import frontier_exploration  # noqa
 import hydra  # noqa
 from habitat import get_config  # noqa
@@ -25,10 +23,12 @@ import vlfm.policy.action_replay_policy  # noqa: F401
 import vlfm.policy.habitat_policies  # noqa: F401
 import vlfm.utils.vlfm_trainer  # noqa: F401
 
+from icecream import ic
 
 class HabitatConfigPlugin(SearchPathPlugin):
     def manipulate_search_path(self, search_path: ConfigSearchPath) -> None:
         search_path.append(provider="habitat", path="config/")
+        ic(search_path.get_path())
 
 
 register_hydra_plugin(HabitatConfigPlugin)
@@ -52,7 +52,7 @@ def main(cfg: DictConfig) -> None:
             cfg.habitat.simulator.agents.main_agent.sim_sensors.pop("semantic_sensor")
         except KeyError:
             pass
-    execute_exp(cfg, "eval" if cfg.habitat_baselines.evaluate else "train")
+    # execute_exp(cfg, "eval" if cfg.habitat_baselines.evaluate else "train")
 
 
 if __name__ == "__main__":

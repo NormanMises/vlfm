@@ -20,6 +20,30 @@ from vlfm.utils.geometry_utils import xyz_yaw_to_tf_matrix
 
 @baseline_registry.register_policy
 class ActionReplayPolicy(BasePolicy):
+    """
+    该类实现了ActionReplayPolicy，它是一种基于动作重放的策略，用于根据预定义的动作序列来指导代理的行动。
+
+    主要功能包括：
+    1. 从环境变量中读取动作文件路径，并加载动作序列。
+    2. 根据给定的参数初始化障碍物地图。
+    3. 在每个时间步，保存当前的RGB和深度图像，并更新障碍物地图。
+    4. 根据预定义的动作序列选择并返回下一个动作。
+
+    该类适用于需要基于历史动作数据进行决策的场景。
+
+    参数：
+    - forward_step_size: 前进移动的步长。
+    - turn_angle: 代理转向的角度。
+    - min_obstacle_height: 考虑为障碍物的最小高度。
+    - max_obstacle_height: 考虑为障碍物的最大高度。
+    - obstacle_map_area_threshold: 地图中障碍物的面积阈值。
+    - agent_radius: 代理的半径。
+    - hole_area_thresh: 孔洞面积的阈值。
+
+    方法：
+    - from_config: 从配置中创建ActionReplayPolicy实例。
+    - act: 根据当前观察返回一个动作，并更新内部状态。
+    """
     def __init__(
         self,
         forward_step_size: float,
@@ -32,6 +56,23 @@ class ActionReplayPolicy(BasePolicy):
         *args: Any,
         **kwargs: Any,
     ) -> None:
+        """
+        Initializes the ActionReplayPolicy with the given parameters.
+
+        Args:
+            forward_step_size (float): The step size for forward movement.
+            turn_angle (float): The angle to turn the agent.
+            min_obstacle_height (float): The minimum height to consider an obstacle.
+            max_obstacle_height (float): The maximum height to consider an obstacle.
+            obstacle_map_area_threshold (float): The area threshold for obstacles in the map.
+            agent_radius (float): The radius of the agent.
+            hole_area_thresh (int): The threshold for the area of holes.
+            *args (Any): Additional positional arguments.
+            **kwargs (Any): Additional keyword arguments.
+
+        Raises:
+            AssertionError: If the 'VLFM_RECORD_ACTIONS_DIR' environment variable is not set.
+        """
         super().__init__()
         assert "VLFM_RECORD_ACTIONS_DIR" in os.environ, "Must set VLFM_RECORD_ACTIONS_DIR"
         self._dir = os.environ["VLFM_RECORD_ACTIONS_DIR"]

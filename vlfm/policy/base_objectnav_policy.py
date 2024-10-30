@@ -394,6 +394,11 @@ class VLFMConfig:
     @classmethod  # type: ignore
     @property
     def kwaarg_names(cls) -> List[str]:
+        """
+        返回除'name'字段外VLFMConfig中所有字段的名称列表。
+        
+        此方法用于获取配置类VLFMConfig中定义的所有字段名，但不包括'name'字段。
+        """
         # This returns all the fields listed above, except the name field
         return [f.name for f in fields(VLFMConfig) if f.name != "name"]
 

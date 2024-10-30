@@ -24,6 +24,15 @@ from vlfm.obs_transformers.utils import image_resize
 
 @baseline_registry.register_obs_transformer()
 class Resize(ObservationTransformer):
+    """
+    初始化一个调整大小的变换器。
+    
+    参数:
+        size (Tuple[int, int]): 想要调整到的最短边的大小。
+        channels_last (bool): 指示通道是否是最后一个维度，默认为True。
+        trans_keys (Tuple[str, ...]): 需要调整大小的键的元组，默认为("rgb", "depth", "semantic")。
+        semantic_key (str): 语义键的名称，默认为"semantic"。
+    """
     def __init__(
         self,
         size: Tuple[int, int],
